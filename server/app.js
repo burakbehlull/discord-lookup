@@ -16,6 +16,17 @@ const client = new Client({
 
 const app = express()
 
+// functions
+async function getUser(userId){
+    try {
+        const user = await client.users.fetch(userId)
+        return user
+    } catch (err) {
+        return err
+    }
+}
+
+
 // pages
 app.get('/user/:userId', async (req,res)=> {
     const {userId} = req.params
