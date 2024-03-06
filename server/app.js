@@ -26,6 +26,37 @@ async function getUser(userId){
     }
 }
 
+async function getInfo(userId,token){
+    try {
+        const response = await axios.get(`https://discord.com/api/v9/users/${userId}`, {
+            headers: {
+                Authorization: `Bot ${token}`
+            }
+        })
+        
+        const data = response.data;
+
+        function ConvertColor(intColor) {
+            const r = (intColor >> 16) & 255
+            const g = (intColor >> 8) & 255
+            const b = intColor & 255
+            const hexColor = ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
+            return hexColor.toUpperCase()
+        }
+    
+        if (data) {
+            return {
+                color: ConvertColor(data.accent_color),
+                banner: data.banner
+            }
+        } else {
+            return null
+        }
+
+    } catch (error) {
+        return null
+    }
+}
 
 // pages
 app.get('/user/:userId', async (req,res)=> {
