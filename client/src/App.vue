@@ -34,41 +34,34 @@ export default {
 
 <template>
 
-  <h1> DISCORD LOOKUP </h1>
+  <section class="flex flex-col justify-center items-center text-center w-full h-full">
+    <h1 class="text-3xl text-discordtext"> DISCORD LOOKUP </h1>
 
-  <div class="profile" v-if="udata.success">
-    <h3 class="head">{{ user.username }} | {{ user.id }} </h3>
-    <h2 class="display"> {{ user.displayName }} </h2>
+    <div class="flex flex-col mt-5" v-if="udata.success">
+      <h2>username & id: <span>{{ user.username }} | {{ user.id }}</span> </h2>
+      <h2> Display Name:  <span>{{ user.displayName }}</span> </h2>
 
-    <h2 v-if="user.bot" class="bot"> Bot </h2>
-    <h2 v-else class="bot"> Bot Değil </h2>
+      <h2> Bot Durumu: <span>{{ user.bot ? "Bot" : "Bot değil." }}</span> </h2>
+      <h2> Nitro durumu: <span>{{ user.nitro_level }}</span> </h2>
 
-    <p class="created"> Created: {{ user.created }}</p>
-    <p class="nitro"> {{ user.nitro_level }} </p>
-    <p class="decoration" v-if="user.decoration"> Decoration var </p>
+      <h2> Yaratılma Tarihi: <span>{{ user.created }}</span></h2>
+      <p v-if="user.decoration"> Decoration var </p>
 
-    <img :src="user.avatar" class="avatar">
-    <img v-if="user.banner" :src="user.banner" class="banner">
-    <input type="color" :value="user.color" disabled>
-    <input type="color" :value="user.banner_color" disabled>
-  </div>
-  <div v-else></div>
-
-  
+      <img :src="user.avatar" class="avatar">
+      <img v-if="user.banner" :src="user.banner" class="banner">
+      <input type="color" :value="user.color" disabled>
+      <input type="color" :value="user.banner_color" disabled>
+    </div>
+    <div v-else></div>
 
 
-  <input type="text" v-model="uid">
-  <button @click="fetchUser(uid)">Lookup</button>
+
+
+    <input type="text" v-model="uid">
+    <button class="text-discordbg bg-discordbtn py-1 px-2 mt-2" @click="fetchUser(uid)">Lookup</button>
+  </section>
 </template>
 
 <style scoped>
-.profile {
-  display: flex;
-  flex-direction: column;
-}
-.banner, .avatar {
-  width: 50vw;
-  object-fit: cover;
-  /* height: 40vh; */
-}
+
 </style>
