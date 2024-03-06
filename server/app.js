@@ -3,7 +3,12 @@ const axios = require('axios')
 const cors = require('cors')
 const {Client, GatewayIntentBits} = require('discord.js')
 require('dotenv').config()
+
 const {PORT, BOT_TOKEN} = process.env
+// alternatif config
+const {TOKEN} = require('./config.json')
+
+const SET_TOKEN = BOT_TOKEN || TOKEN
 
 const client = new Client({
     intents: [
@@ -65,7 +70,7 @@ async function getInfo(userId,token){
 app.get('/user/:userId', async (req,res)=> {
     const {userId} = req.params
     const user = await getUser(userId)
-    const info = await getInfo(userId, BOT_TOKEN) 
+    const info = await getInfo(userId, SET_TOKEN) 
 
     try {
         res.status(200).json({
@@ -91,7 +96,7 @@ app.get('/user/:userId', async (req,res)=> {
 })
 
 
-client.login(BOT_TOKEN)
+client.login(SET_TOKEN)
 app.listen(process.env.PORT, ()=> {
     console.log(`Sunucu ${PORT} portunda başlatıldı.`)
 })
