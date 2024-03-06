@@ -97,6 +97,6 @@ app.get('/user/:userId', async (req,res)=> {
 
 
 client.login(SET_TOKEN)
-app.listen(process.env.PORT, ()=> {
+app.listen(process.env.PORT || 80, ()=> {
     console.log(`Sunucu ${PORT} portunda başlatıldı.`)
 })
