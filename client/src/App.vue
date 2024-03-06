@@ -32,8 +32,32 @@ export default {
 
 <template>
 
+  <h1> DISCORD LOOKUP </h1>
+
+  <div class="profile" v-if="udata.success">
+    <h3 class="head">{{ user.username }} | {{ user.id }} </h3>
+    <p class="created"> Created: {{ user.created }}</p>
+    <img :src="user.avatar" class="avatar">
+    <img :src="user.banner" class="banner">
+    <input type="color" :value="user.u_color" disabled>
+  </div>
+  <div v-else></div>
+
+  
+
+
+  <input type="text" v-model="uid">
+  <button @click="fetchUser(uid)">Lookup</button>
 </template>
 
 <style scoped>
-
+.profile {
+  display: flex;
+  flex-direction: column;
+}
+.banner, .avatar {
+  width: 50vw;
+  object-fit: cover;
+  /* height: 40vh; */
+}
 </style>
