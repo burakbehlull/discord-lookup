@@ -26,14 +26,6 @@ app.use(cors())
 
 // functions
 
-function ConvertColor(intColor) {
-    const r = (intColor >> 16) & 255
-    const g = (intColor >> 8) & 255
-    const b = intColor & 255
-    const hexColor = ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
-    return hexColor.toUpperCase()
-}
-
 function NitroControl(type){
     switch(type){
         case 0:
@@ -51,6 +43,7 @@ async function getUser(userId){
     try {
         const user = await client.users.fetch(userId)
         return user
+        
     } catch (err) {
         return err
     }
@@ -63,9 +56,7 @@ async function getInfo(userId){
                 Authorization: `Bot ${SET_TOKEN}`
             }
         })        
-        const data = response.data;
-        
-    
+        const data = response.data    
         return data || null
     } catch (err) {
         return {
@@ -82,23 +73,28 @@ app.get('/user/:userId', async (req,res)=> {
     try {
         const user = await getUser(userId)
         const info = await getInfo(userId) 
+        const userBanner = info.banner ? `https://cdn.discordapp.com/banners/${userId}/${info.banner}.jpg?size=4096` : null
+
         return res.status(200).json({
             success: true,
             message: "Kullanıcı bulundu.",
             user: {
                 id: user.id,
+                bot: user.bot,
+                
                 displayName: info.global_name,
                 username: user.username,
                 created: user.createdAt,
 
                 avatar: user.displayAvatarURL({ format: 'png', size: 4096, dynamic: true }),
-                banner: `https://cdn.discordapp.com/banners/${userId}/${info.banner}.jpg?size=4096`,
+                banner: userBanner,
                 
                 nitro_level: NitroControl(info.premium_type),
 
-                color: "#"+ConvertColor(info.accent_color), 
+                color: user.accentColor, 
                 banner_color: info.banner_color,
-
+                decoration: user.avatarDecoration,
+                
                 discriminator: user.discriminator,
             }
         })
