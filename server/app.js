@@ -1,5 +1,6 @@
 const express = require('express')
 const axios = require('axios')
+const cors = require('cors')
 const {Client, GatewayIntentBits} = require('discord.js')
 require('dotenv').config()
 const {PORT, BOT_TOKEN} = process.env
@@ -15,6 +16,8 @@ const client = new Client({
 })
 
 const app = express()
+
+app.use(cors())
 
 // functions
 async function getUser(userId){
