@@ -77,7 +77,7 @@ app.get('/user/:userId', async (req,res)=> {
                 discriminator: user.discriminator,
                 avatar: user.displayAvatarURL({ format: 'png', size: 4096, dynamic: true }),
                 banner: `https://cdn.discordapp.com/banners/${userId}/${info.banner}.jpg?size=4096`,
-                u_color: info.color, 
+                u_color: "#"+info.color, 
                 created: user.createdAt,
             }
         })
