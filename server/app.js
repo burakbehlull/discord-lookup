@@ -8,7 +8,7 @@ const {PORT, BOT_TOKEN} = process.env
 // alternatif config
 const {TOKEN} = require('./config.json')
 
-const SET_TOKEN = BOT_TOKEN || TOKEN
+let SET_TOKEN = BOT_TOKEN || TOKEN
 
 const client = new Client({
     intents: [
@@ -25,6 +25,28 @@ const app = express()
 app.use(cors())
 
 // functions
+
+function ConvertColor(intColor) {
+    const r = (intColor >> 16) & 255
+    const g = (intColor >> 8) & 255
+    const b = intColor & 255
+    const hexColor = ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
+    return hexColor.toUpperCase()
+}
+
+function NitroControl(type){
+    switch(type){
+        case 0:
+            return "No Nitro"
+        case 1:
+            return "Classic Nitro"
+        case 2:
+            return "Boostlu Nitro"
+        default: 
+            return;
+    }
+}
+
 async function getUser(userId){
     try {
         const user = await client.users.fetch(userId)
@@ -34,69 +56,66 @@ async function getUser(userId){
     }
 }
 
-async function getInfo(userId,token){
+async function getInfo(userId){
     try {
         const response = await axios.get(`https://discord.com/api/v9/users/${userId}`, {
             headers: {
-                Authorization: `Bot ${token}`
+                Authorization: `Bot ${SET_TOKEN}`
             }
-        })
-        
+        })        
         const data = response.data;
-
-        function ConvertColor(intColor) {
-            const r = (intColor >> 16) & 255
-            const g = (intColor >> 8) & 255
-            const b = intColor & 255
-            const hexColor = ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
-            return hexColor.toUpperCase()
-        }
+        
     
-        if (data) {
-            return {
-                color: ConvertColor(data.accent_color),
-                banner: data.banner
-            }
-        } else {
-            return null
+        return data || null
+    } catch (err) {
+        return {
+            message: err
         }
-
-    } catch (error) {
-        return null
     }
 }
+
+
 
 // pages
 app.get('/user/:userId', async (req,res)=> {
     const {userId} = req.params
-    const user = await getUser(userId)
-    const info = await getInfo(userId, SET_TOKEN) 
-
     try {
-        res.status(200).json({
+        const user = await getUser(userId)
+        const info = await getInfo(userId) 
+        return res.status(200).json({
             success: true,
             message: "Kullanıcı bulundu.",
             user: {
                 id: user.id,
+                displayName: info.global_name,
                 username: user.username,
-                discriminator: user.discriminator,
+                created: user.createdAt,
+
                 avatar: user.displayAvatarURL({ format: 'png', size: 4096, dynamic: true }),
                 banner: `https://cdn.discordapp.com/banners/${userId}/${info.banner}.jpg?size=4096`,
-                u_color: "#"+info.color, 
-                created: user.createdAt,
+                
+                nitro_level: NitroControl(info.premium_type),
+
+                color: "#"+ConvertColor(info.accent_color), 
+                banner_color: info.banner_color,
+
+                discriminator: user.discriminator,
             }
         })
     } catch (err) {
-        res.status(204).json({
+        return res.status(404).json({
             success: false,
             message: "Kullanıcı bulunamadı.",
-            user: null
+            user: null,
+            error: err
         })
     }
 })
 
 
 client.login(SET_TOKEN)
-app.listen(process.env.PORT || 80, ()=> {
-    console.log(`Sunucu ${PORT} portunda başlatıldı.`)
+.then(()=>console.log('Token başarılı'))
+.catch((err)=> console.log('Hata', err))
+app.listen(PORT || 3000, ()=> {
+    console.log(`Sunucu ${PORT || 80} portunda başlatıldı.`)
 })
