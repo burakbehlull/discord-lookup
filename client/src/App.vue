@@ -6,8 +6,10 @@ export default {
   data(){
     let uid = ref('')
     return {
-      udata: null,
-      user: null,
+      udata: {
+        success: null
+      },
+      user: undefined,
       uid: uid.value,
     }
   },
@@ -15,7 +17,7 @@ export default {
     async fetchUser(userid){
       console.log(userid)
       try {
-        await axios.get(`http://localhost/user/${userid}`)
+        await axios.get(`http://localhost:3000/user/${userid}`)
         .then((res)=> {
           this.udata = res.data
           this.user = res.data['user']
@@ -36,10 +38,19 @@ export default {
 
   <div class="profile" v-if="udata.success">
     <h3 class="head">{{ user.username }} | {{ user.id }} </h3>
+    <h2 class="display"> {{ user.displayName }} </h2>
+
+    <h2 v-if="user.bot" class="bot"> Bot </h2>
+    <h2 v-else class="bot"> Bot Değil </h2>
+
     <p class="created"> Created: {{ user.created }}</p>
+    <p class="nitro"> {{ user.nitro_level }} </p>
+    <p class="decoration" v-if="user.decoration"> Decoration var </p>
+
     <img :src="user.avatar" class="avatar">
-    <img :src="user.banner" class="banner">
-    <input type="color" :value="user.u_color" disabled>
+    <img v-if="user.banner" :src="user.banner" class="banner">
+    <input type="color" :value="user.color" disabled>
+    <input type="color" :value="user.banner_color" disabled>
   </div>
   <div v-else></div>
 
