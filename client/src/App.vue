@@ -35,9 +35,14 @@ export default {
 <template>
 
   <section class="flex flex-col justify-center items-center text-center w-full h-full">
-    <h1 class="text-3xl text-discordtext"> DISCORD LOOKUP </h1>
-
-    <div class="flex flex-col mt-5" v-if="udata.success">
+    <h1 class="text-4xl text-discordtext"> DISCORD LOOKUP </h1>
+    
+    <div class="flex flex-col gap-4 mt-8">
+      <input type="text" v-model="uid" class="border border-2 border-discordtext rounded-sm p-2 outline-none text-center bg-discordbg text-discordtext">
+      <button class="border border-discordbtn text-discordbg bg-discordbtn py-1 px-2 hover:bg-discordbg hover:border-discordtext hover:text-discordbtn" @click="fetchUser(uid)">Lookup</button>
+    </div>
+    
+    <div class="flex flex-col mt-5 justify-start items-center gap-4" v-if="udata.success">
       <h2>username & id: <span>{{ user.username }} | {{ user.id }}</span> </h2>
       <h2> Display Name:  <span>{{ user.displayName }}</span> </h2>
 
@@ -47,18 +52,21 @@ export default {
       <h2> Yaratılma Tarihi: <span>{{ user.created }}</span></h2>
       <p v-if="user.decoration"> Decoration var </p>
 
-      <img :src="user.avatar" class="avatar">
-      <img v-if="user.banner" :src="user.banner" class="banner">
-      <input type="color" :value="user.color" disabled>
-      <input type="color" :value="user.banner_color" disabled>
+      <div class="flex gap-4">
+        <input type="color" :value="user.color">
+        <input type="color" :value="user.banner_color">
+      </div>
+
+      <a :href="user.avatar" target="_blank">
+        <img :src="user.avatar">
+      </a>
+      <a :href="user.banner" target="_blank">
+        <img v-if="user.banner" :src="user.banner">
+      </a>
     </div>
-    <div v-else></div>
-
-
-
-
-    <input type="text" v-model="uid">
-    <button class="text-discordbg bg-discordbtn py-1 px-2 mt-2" @click="fetchUser(uid)">Lookup</button>
+    <div v-else>
+      <h2>Bir user id giriniz.</h2>
+    </div>
   </section>
 </template>
 
