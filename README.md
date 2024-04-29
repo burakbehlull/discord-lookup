@@ -11,4 +11,6 @@
 - Nodejs
 - Vue
 - DiscordJS
+- ElectronJS
+  TailwindCSS
 
