@@ -33,7 +33,7 @@ export default {
 </script>
 
 <template>
-
+  <h1>xd</h1>
   <section class="flex flex-col justify-center items-center text-center w-full h-full">
     <h1 class="text-4xl text-discordtext"> DISCORD LOOKUP </h1>
     
