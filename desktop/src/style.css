@@ -16,4 +16,9 @@
     span {
         @apply font-bold;
     }
+
+    .move {
+        -webkit-user-select: none;
+        -webkit-app-region: drag;
+    }
 }

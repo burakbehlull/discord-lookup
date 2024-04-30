@@ -35,7 +35,7 @@ function NitroControl(type){
         case 2:
             return "Boostlu Nitro"
         default: 
-            return;
+            break;
     }
 }
 

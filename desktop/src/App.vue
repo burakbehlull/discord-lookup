@@ -1,8 +1,12 @@
 <script>
 import {ref} from 'vue'
 import axios from 'axios'
+import Feature from './src/Feature.vue'
 export default {
   name: "App",
+  components: {
+    Feature
+  },
   data(){
     let uid = ref('')
     return {
@@ -27,14 +31,17 @@ export default {
       } catch (err) {
         return err
       }
-    } 
+    }
   }
 }
 </script>
 
 <template>
 
-  <section class="flex flex-col justify-center items-center text-center w-full h-full">
+  <Feature />
+  <section class="flex flex-col justify-center items-center text-center w-[90vw] h-[60vh]"> <!-- electron: w-[90vw] h-[80vh] and client: w-full h-full -->
+    
+    
     <h1 class="text-4xl text-discordtext"> DISCORD LOOKUP V1 </h1>
     
     <div class="flex flex-col gap-4 mt-8">
