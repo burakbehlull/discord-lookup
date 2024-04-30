@@ -81,6 +81,7 @@ app.get('/user/:userId', async (req,res)=> {
             user: {
                 id: user.id,
                 bot: user.bot,
+                nitro_level: NitroControl(info.premium_type),
                 
                 displayName: info.global_name,
                 username: user.username,
@@ -89,7 +90,6 @@ app.get('/user/:userId', async (req,res)=> {
                 avatar: user.displayAvatarURL({ format: 'png', size: 4096, dynamic: true }),
                 banner: userBanner,
                 
-                nitro_level: NitroControl(info.premium_type),
 
                 color: user.accentColor, 
                 banner_color: info.banner_color,

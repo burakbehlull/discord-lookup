@@ -39,7 +39,7 @@ export default {
 <template>
 
   <Feature />
-  <section class="flex flex-col justify-center items-center text-center w-[90vw] h-[60vh]"> <!-- electron: w-[90vw] h-[80vh] and client: w-full h-full -->
+  <section class="flex flex-col justify-center items-center text-center w-[90vw] max-h-[750px] mt-[10vh] max-[750px]:mt-[3rem]"> <!-- electron: w-[90vw] h-[60vh] and client: w-full h-full -->
     
     
     <h1 class="text-4xl text-discordtext"> DISCORD LOOKUP V1 </h1>

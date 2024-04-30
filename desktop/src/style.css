@@ -21,4 +21,7 @@
         -webkit-user-select: none;
         -webkit-app-region: drag;
     }
+    /* @media (max-width: 750){
+
+    } */
 }
