@@ -17,16 +17,20 @@
 
         <div v-if="user" class="mt-4">
           <div class="flex flex-col items-center">
-            <img
-              :src="user.banner || '/default_banner.png'"
-              alt="banner"
-              class="w-full rounded-xl object-cover h-24"
-            />
-            <img
-              :src="user.avatar"
-              alt="avatar"
-              class="rounded-full w-24 h-24 -mt-12 border-4 border-base-100"
-            />
+			<a v-if="user.banner" :href="user.banner" target="_blank" rel="noopener">
+				<img
+				  :src="user.banner || '/default_banner.png'"
+				  alt="banner"
+				  class="w-full rounded-xl object-cover h-24"
+				/>
+			</a>
+			<a :href="user.avatar" target="_blank" rel="noopener">
+				<img
+				  :src="user.avatar"
+				  alt="avatar"
+				  class="rounded-full w-24 h-24 -mt-12 border-4 border-base-100"
+				/>
+			</a>
             <h3 class="text-lg font-bold mt-2">{{ user.username }}</h3>
             <p class="text-sm opacity-70">#{{ user.discriminator }}</p>
             <p class="mt-1 text-sm">
