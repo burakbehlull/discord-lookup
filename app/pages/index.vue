@@ -36,7 +36,7 @@
             <p class="mt-1 text-sm">
               <b>Oluşturulma:</b> {{ formatDate(user.createdAt) }}
             </p>
-            <p><b>Nitro:</b> {{ user.premium_type ? 'Var' : 'Yok' }}</p>
+            <!--<p><b>Nitro:</b> {{ user.premium_type ? 'Var' : 'Yok' }}</p>-->
 
             <div class="mt-2">
               <b>Rozetler:</b>
@@ -55,6 +55,7 @@
 </template>
 
 <script setup lang="ts">
+
 import axios from "axios";
 import { ref } from "vue";
 

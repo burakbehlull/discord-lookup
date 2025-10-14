@@ -4,7 +4,10 @@
       <a class="text-xl font-bold">Discord Lookup</a>
     </div>
 
-    <div class="flex-none">
+    <div class="flex justify-center items-center gap-6">
+	  <a href="https://github.com/burakbehlull/discord-lookup" target="_blank" rel="noopener">
+		<VscGithubAlt  />
+	  </a>
       <button class="btn btn-ghost" @click="toggleTheme">
         <svg
           v-if="theme === 'light'"
@@ -34,6 +37,9 @@
 </template>
 
 <script setup lang="ts">
+
+import { BsGithub } from "vue-icons-plus/bs";
+import { VscGithubAlt } from "vue-icons-plus/vsc";
 import { useTheme } from "../composables/useTheme";
 
 const { theme, toggleTheme } = useTheme();
