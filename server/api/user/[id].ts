@@ -1,78 +1,106 @@
 import axios from "axios";
 
-const BADGE_ICONS: Record<number, { name: string; icon: string; color: string }> = {
+const BADGE_ICONS: Record<number, { name: string; icon: string; iconType: "svg" | "emoji"; color: string }> = {
   1: {
     name: "Discord Staff",
-    icon: "https://cdn.discordapp.com/badge-icons/5e747f5723f201105e9a52a09431e759.png",
+    icon: "👑",
+    iconType: "emoji",
     color: "#5865F2",
   },
   2: {
     name: "Partner",
-    icon: "https://cdn.discordapp.com/badge-icons/3fcd18f3a3bb93655a603aac6c1259cb.png",
+    icon: "💎",
+    iconType: "emoji",
     color: "#5865F2",
   },
   4: {
     name: "Hypesquad Events",
-    icon: "https://cdn.discordapp.com/badge-icons/bf01d00716819c941a9101b004d65d96.png",
+    icon: "/icons/hypesquadevents.svg",
+    iconType: "svg",
     color: "#F47FFF",
   },
   8: {
     name: "Bug Hunter Level 1",
-    icon: "https://cdn.discordapp.com/badge-icons/2baa52e093b920b97c383d6dc943c5d7.png",
+    icon: "🐛",
+    iconType: "emoji",
     color: "#FEE75C",
   },
   64: {
     name: "HypeSquad Bravery",
-    icon: "https://cdn.discordapp.com/badge-icons/03256293315000382817ee64e574c0f6.png",
+    icon: "/icons/hypesquadbravery.svg",
+    iconType: "svg",
     color: "#F47B67",
   },
   128: {
     name: "HypeSquad Brilliance",
-    icon: "https://cdn.discordapp.com/badge-icons/aa38fdfa5c1abdf673524e1922f3ba18.png",
+    icon: "💡",
+    iconType: "emoji",
     color: "#F47B67",
   },
   256: {
     name: "HypeSquad Balance",
-    icon: "https://cdn.discordapp.com/badge-icons/1aa2a58d7eb0f35cc37c2de7c6e78b64.png",
+    icon: "⚖️",
+    iconType: "emoji",
     color: "#45DDC0",
   },
   512: {
     name: "Early Supporter",
-    icon: "https://cdn.discordapp.com/badge-icons/706078676679a4ae3d90e4c0d1b3ec44.png",
+    icon: "/icons/discordearlysupporter.svg",
+    iconType: "svg",
     color: "#EB459E",
   },
   1024: {
     name: "Team User",
-    icon: "https://cdn.discordapp.com/badge-icons/1a66de499daa2dba2c43e6b5c0a19f0a.png",
+    icon: "👥",
+    iconType: "emoji",
     color: "#5865F2",
   },
   16384: {
     name: "Bug Hunter Level 2",
-    icon: "https://cdn.discordapp.com/badge-icons/98f7c1c85d8786d340357687c45cfe6c.png",
+    icon: "/icons/discordbughunter2.svg",
+    iconType: "svg",
     color: "#FEE75C",
   },
   131072: {
     name: "Verified Bot Developer",
-    icon: "https://cdn.discordapp.com/badge-icons/6f86b1593c6cf4694d66c91b33bf6ce1.png",
+    icon: "/icons/discordbotdev.svg",
+    iconType: "svg",
     color: "#3BA55D",
   },
   262144: {
     name: "Certified Moderator",
-    icon: "https://cdn.discordapp.com/badge-icons/fee163552257cc58c7de6c30d23f314b.png",
+    icon: "/icons/discordmod.svg",
+    iconType: "svg",
     color: "#3BA55D",
   },
   4194304: {
     name: "Active Developer",
-    icon: "https://cdn.discordapp.com/badge-icons/6bdc42827a3840813c854be932d75401.png",
+    icon: "⚡",
+    iconType: "emoji",
     color: "#5865F2",
   },
 };
 
 const NITRO_TYPES = [
-  { level: 0, name: "Yok", icon: null },
-  { level: 1, name: "Nitro Basic", icon: "https://cdn.discordapp.com/emojis/833287463203618857.webp" },
-  { level: 2, name: "Nitro Boost", icon: "https://cdn.discordapp.com/emojis/833287463203618857.webp" },
-  { level: 3, name: "Nitro Basic", icon: "https://cdn.discordapp.com/emojis/833287463203618857.webp" },
+  { level: 0, name: "Yok", icon: null, iconType: null as null | "svg" | "emoji" },
+  {
+    level: 1,
+    name: "Nitro Basic",
+    icon: "/icons/discordnitro.svg",
+    iconType: "svg" as "svg" | "emoji",
+  },
+  {
+    level: 2,
+    name: "Nitro Boost",
+    icon: "/icons/discordbooster.svg",
+    iconType: "svg" as "svg" | "emoji",
+  },
+  {
+    level: 3,
+    name: "Nitro Basic",
+    icon: "/icons/discordnitro.svg",
+    iconType: "svg" as "svg" | "emoji",
+  },
 ];
 
 export default defineEventHandler(async (event) => {
@@ -88,7 +116,7 @@ export default defineEventHandler(async (event) => {
 
     const user = res.data;
     const flags = user.public_flags ?? 0;
-    const badges: Array<{ id: number; name: string; icon: string; color: string }> = [];
+    const badges: Array<{ id: number; name: string; icon: string; iconType: "svg" | "emoji"; color: string }> = [];
 
     for (const [flag, badge] of Object.entries(BADGE_ICONS)) {
       if (flags & Number(flag)) {
@@ -99,7 +127,14 @@ export default defineEventHandler(async (event) => {
     const createdAt = new Date(Number((BigInt(user.id) >> 22n) + 1420070400000n));
 
     const premium_type = user.premium_type || 0;
-    const nitro = NITRO_TYPES[premium_type] || NITRO_TYPES[0];
+    const nitroRaw = NITRO_TYPES[premium_type] || NITRO_TYPES[0];
+    const nitro = {
+      level: nitroRaw.level,
+      name: nitroRaw.name,
+      icon: nitroRaw.icon,
+      iconType: nitroRaw.iconType,
+      subscription: premium_type > 0,
+    };
 
     let clan = null;
     if (user.clan) {
@@ -141,10 +176,7 @@ export default defineEventHandler(async (event) => {
       public_flags: flags,
       badges,
       premium_type,
-      nitro: {
-        ...nitro,
-        subscription: premium_type > 0,
-      },
+      nitro,
       clan,
       createdAt: createdAt.toISOString(),
       createdAtTimestamp: createdAt.getTime(),
